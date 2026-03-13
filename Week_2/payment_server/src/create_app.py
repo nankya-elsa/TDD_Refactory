@@ -101,5 +101,18 @@ def create_app():
         # if we didn't find a payment, return a 404
         return jsonify({"error": "Payment not found"}), 404
 
+
+    # @app.post('/payments')
+    # def create_payment():
+    #     body = request.get_json()
+    #     new_payment ={
+    #         "cutomer_id": body['customer_id'],
+    #         "amount": body['amount'],
+    #         "currency": body['currency'],
+    #     }
+
+    #     payments.append(new_payment)
+    #     return jsonify(new_payment),201
+    
     #return the finished app
     return app

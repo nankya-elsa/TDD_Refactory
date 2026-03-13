@@ -143,5 +143,13 @@ class PaymentServerTests(unittest.TestCase): # class to contain all our tests
         # this should be rejected with a 400
         self.assertEqual(response.status_code, 400)
 
+    # def test_create_payment(self):
+    #     #create a customer
+    #     response = self.app.post('/customers', json={"name": "Alice", "email": "alice@gmail.com"})
+    #     customer_id  = response.get_json()['id']
+    #     # create payment for the customer
+    #     new_response = self.app.post('/payments', json={{"customer_id": customer_id, "amount": 1000, "currency": "usd"}})
+    #     self.assertEqual(new_response.status_code, 201)
+
 if __name__ == '__main__':
     unittest.main()
