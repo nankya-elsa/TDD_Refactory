@@ -103,5 +103,64 @@ class RouteTests(unittest.TestCase):
         data = response.get_json()
         self.assertEqual(data['status'], 'succeeded')
 
+    def test_post_payments_amount_of_1_returns_201(self):
+        # 1 is the minimum valid amount — should return 201
+        self.mock_service.create_payment.return_value = {
+            "id": "pay_1",
+            "customer_id": "cus_1",
+            "amount": 1,
+            "currency": "usd",
+            "status": "pending"
+        }
+        
+        response = self.app.post(
+            '/payments',
+            json={"customer_id": "cus_1", "amount": 1, "currency": "usd"}
+        )
+        
+        self.assertEqual(response.status_code, 201)
+
+    def test_post_payments_amount_of_0_returns_400(self):
+        # 0 is not a valid amount — should return 400
+        self.mock_service.create_payment.side_effect = ValueError('Invalid amount')
+        
+        response = self.app.post(
+            '/payments',
+            json={"customer_id": "cus_1", "amount": 0, "currency": "usd"}
+        )
+        
+        self.assertEqual(response.status_code, 400)
+
+    def test_post_payments_amount_of_negative_returns_400(self):
+        # negative amount is not valid — should return 400
+        self.mock_service.create_payment.side_effect = ValueError('Invalid amount')
+        
+        response = self.app.post(
+            '/payments',
+            json={"customer_id": "cus_1", "amount": -1, "currency": "usd"}
+        )
+        
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_customer_unknown_id_returns_404(self):
+        # tell the mock to return None — customer doesn't exist
+        self.mock_service.get_customer.return_value = None
+        
+        response = self.app.get('/customers/cus_999')
+        
+        self.assertEqual(response.status_code, 404)
+        data = response.get_json()
+        self.assertEqual(data['error'], 'Customer not found')
+
+    def test_get_payment_unknown_id_returns_404(self):
+        # tell the mock to return None — payment doesn't exist
+        self.mock_service.get_payment.return_value = None
+        
+        response = self.app.get('/payments/pay_999')
+        
+        self.assertEqual(response.status_code, 404)
+        data = response.get_json()
+        self.assertEqual(data['error'], 'Payment not found')
+
 if __name__ == "__main__":
     unittest.main()

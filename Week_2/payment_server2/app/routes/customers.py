@@ -26,3 +26,15 @@ def create_customers_routes(app, service):
         
         # return the new customer with 201 created
         return jsonify(new_customer), 201
+    
+    @app.get('/customers/<customer_id>')
+    def get_customer(customer_id):
+        # call the service to get the customer
+        customer = service.get_customer(customer_id)
+        
+        # if the service returns None — customer doesn't exist, return 404
+        if customer is None:
+            return jsonify({"error": "Customer not found"}), 404
+        
+        # return the customer with 200
+        return jsonify(customer), 200
