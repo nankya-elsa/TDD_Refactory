@@ -21,7 +21,7 @@ class PaymentService:
             "email": email
         }
         # save the new customer to the repo
-        self.repo.save_cutomer(new_customer)
+        self.repo.save_customer(new_customer)
         return new_customer
 
 

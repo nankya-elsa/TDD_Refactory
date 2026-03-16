@@ -9,7 +9,7 @@ class FakePaymentRepo:
         self.customers = {}
         self.payments = {}
 
-    def save_cutomer(self, customer):
+    def save_customer(self, customer):
         # store the customer in the dictionary using its id as the key
         self.customers[customer['id']] = customer
         return customer
@@ -17,6 +17,15 @@ class FakePaymentRepo:
     def find_customer_by_id(self, customer_id):
         # look up the customer by id — return None if not found
         return self.customers.get(customer_id, None)
+    
+    def find_customer_by_email(self, email):
+        # loop through all customers and find the one with matching email
+        for customer in self.customers.values():
+            if customer['email'] == email:
+                return customer
+        
+        # if we get here no customer was found — return None
+        return None
 
     def save_payment(self, payment):
         # store the payment in the payments dictionary,its id as the key
